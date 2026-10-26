@@ -1,0 +1,87 @@
+{
+  "services": {
+    "bot": {
+      "image": "oven/bun:1.4.4",
+      "pull_policy": "if_not_present",
+      "init": true,
+      "restart": "unless-stopped",
+      "working_dir": "/app",
+      "entrypoint": [
+        "/bin/sh",
+        "/repo/.dokploy/start.sh"
+      ],
+      "env_file": [
+        "/var/lib/dokploy-discord-bots/persistent/modmail/runtime.env"
+      ],
+      "environment": {
+        "TZ": "Australia/Melbourne"
+      },
+      "stop_grace_period": "30s",
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "..",
+          "target": "/repo",
+          "read_only": true,
+          "bind": {
+            "create_host_path": false
+          }
+        },
+        {
+          "type": "volume",
+          "source": "dependencies",
+          "target": "/app/node_modules"
+        },
+        {
+          "type": "bind",
+          "source": "/var/lib/dokploy-discord-bots/persistent/modmail/db",
+          "target": "/app/db",
+          "bind": {
+            "create_host_path": false
+          }
+        },
+        {
+          "type": "bind",
+          "source": "/var/lib/dokploy-discord-bots/persistent/modmail/attachments",
+          "target": "/app/attachments",
+          "bind": {
+            "create_host_path": false
+          }
+        },
+        {
+          "type": "bind",
+          "source": "/var/lib/dokploy-discord-bots/persistent/modmail/logs",
+          "target": "/app/logs",
+          "bind": {
+            "create_host_path": false
+          }
+        },
+        {
+          "type": "bind",
+          "source": "/var/lib/dokploy-discord-bots/persistent/modmail/config.ini",
+          "target": "/app/config.ini",
+          "bind": {
+            "create_host_path": false
+          },
+          "read_only": true
+        }
+      ],
+      "networks": [
+        "botdata",
+        "dokploy-network"
+      ]
+    }
+  },
+  "volumes": {
+    "dependencies": {}
+  },
+  "networks": {
+    "botdata": {
+      "external": true,
+      "name": "discord-bots-data"
+    },
+    "dokploy-network": {
+      "external": true
+    }
+  }
+}
