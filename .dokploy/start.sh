@@ -1,6 +1,8 @@
 #!/bin/sh
 set -eu
 cd /app
+printf 'Runtime: Bun '
+/usr/local/bin/bun --version
 # Run the checked-out Git code in a fresh container directory. Runtime state is
 # mounted independently, and is never copied over by repository files.
 tar -C /repo --exclude='./.git' --exclude='./.dokploy' --exclude='./node_modules' --exclude='./config.json' --exclude='./config.ini' --exclude='./.env' --exclude='./data' --exclude='./storage' --exclude='./db' --exclude='./logs' --exclude='./log' --exclude='./attachments' --exclude='./webpanel.json' --exclude='./testdata.json' --exclude='./build' -cf - . | tar -C /app -xf -

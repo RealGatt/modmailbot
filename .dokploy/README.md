@@ -3,8 +3,8 @@ Dokploy deploys this repository using `.dokploy/compose.yaml` and the official
 
 Configuration and mutable data are host mounts under
 `/var/lib/dokploy-discord-bots/persistent/modmail`.
-`runtime.env` supplies deployment environment values; keep it and all credentials
-outside Git. The code checkout is read-only. Each deployment recreates the
+Dokploy generates `.dokploy/.env` from its environment settings on each
+deployment. Keep those settings and host configuration credentials outside Git. The code checkout is read-only. Each deployment recreates the
 container, copies the Git code into its fresh working directory, installs locked
 dependencies, and starts Bun directly. The dependency volume is refreshed by
 `bun install --frozen-lockfile`; state mounts are preserved across deployments.
